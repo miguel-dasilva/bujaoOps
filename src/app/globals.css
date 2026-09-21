@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Pensado para usar ao sol, numa festa, com uma mão: contraste alto,
+   alvos de toque grandes, números tabulares. Cores do Pico: basalto,
+   nevoeiro, Atlântico. Verde e vermelho só para ganho e perda. */
+@theme {
+  --color-basalto: #23282b;
+  --color-rocha: #5b6368;
+  --color-linha: #d6dcda;
+  --color-nevoa: #f2f4f3;
+  --color-atlantico: #1e5a78;
+  --color-ganho: #2e7a4c;
+  --color-perda: #b23a2e;
+  --font-sans: var(--font-atkinson), system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-nevoa);
+  color: var(--color-basalto);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-atlantico);
+  outline-offset: 2px;
+}
