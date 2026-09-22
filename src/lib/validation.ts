@@ -22,6 +22,12 @@ const optionalDate = z
   .transform((v) => v || null)
   .refine((v) => v === null || /^\d{4}-\d{2}-\d{2}$/.test(v), "Data inválida");
 
+const requiredDate = z
+  .string()
+  .trim()
+  .min(1, "Indica uma data")
+  .refine((v) => /^\d{4}-\d{2}-\d{2}$/.test(v), "Data inválida");
+
 const optionalText = z
   .string()
   .trim()
@@ -44,3 +50,19 @@ export const assetSchema = z.object({
 });
 
 export type AssetInput = z.output<typeof assetSchema>;
+
+export const revenueEventSchema = z.object({
+  assetId: z.uuid("Escolhe uma máquina"),
+  title: z
+    .string()
+    .trim()
+    .min(1, "Indica um nome para a festa")
+    .max(120, "Máximo de 120 caracteres"),
+  venueName: optionalText,
+  startsOn: requiredDate,
+  endsOn: optionalDate,
+  platformFee: optionalEuros,
+  notes: optionalText,
+});
+
+export type RevenueEventInput = z.output<typeof revenueEventSchema>;

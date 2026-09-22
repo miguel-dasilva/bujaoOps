@@ -64,3 +64,50 @@ export function Field({
     </div>
   );
 }
+
+export function Select({
+  label,
+  name,
+  hint,
+  errors,
+  options,
+  ...select
+}: React.SelectHTMLAttributes<HTMLSelectElement> & {
+  label: string;
+  name: string;
+  hint?: string;
+  errors?: string[];
+  options: { value: string; label: string }[];
+}) {
+  const describedBy = errors?.length ? `${name}-error` : hint ? `${name}-hint` : undefined;
+  return (
+    <div className="grid gap-1.5">
+      <label htmlFor={name} className="font-bold">
+        {label}
+      </label>
+      <select
+        id={name}
+        name={name}
+        aria-invalid={errors?.length ? true : undefined}
+        aria-describedby={describedBy}
+        className="min-h-12 rounded-md border border-linha bg-white px-3 text-lg aria-invalid:border-perda"
+        {...select}
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+      {errors?.length ? (
+        <p id={`${name}-error`} className="text-sm text-perda">
+          {errors[0]}
+        </p>
+      ) : hint ? (
+        <p id={`${name}-hint`} className="text-sm text-rocha">
+          {hint}
+        </p>
+      ) : null}
+    </div>
+  );
+}

@@ -10,6 +10,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Link href="/" className="rounded px-3 py-2 hover:bg-white/10">
               Resumo
             </Link>
+            <Link href="/festas" className="rounded px-3 py-2 hover:bg-white/10">
+              Festas
+            </Link>
             <Link href="/maquinas" className="rounded px-3 py-2 hover:bg-white/10">
               Máquinas
             </Link>
