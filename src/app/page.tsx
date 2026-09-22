@@ -1,12 +1,15 @@
 import { AppShell } from "@/components/app-shell";
 import { ButtonLink } from "@/components/ui";
-import { getPayback, type PaybackRow } from "@/db/payback";
+import { getGeneralExpensesCents, getPayback, type PaybackRow } from "@/db/payback";
 import { formatCents } from "@/lib/money";
 import { requireOrg } from "@/lib/tenant";
 
 export default async function SummaryPage() {
   const { orgId } = await requireOrg();
-  const rows = await getPayback(orgId);
+  const [rows, generalExpensesCents] = await Promise.all([
+    getPayback(orgId),
+    getGeneralExpensesCents(orgId),
+  ]);
 
   return (
     <AppShell>
@@ -23,12 +26,40 @@ export default async function SummaryPage() {
         </div>
       ) : (
         <div className="grid gap-4">
+          <TotalBalanceCard rows={rows} generalExpensesCents={generalExpensesCents} />
           {rows.map((r) => (
             <PaybackCard key={r.id} row={r} />
           ))}
         </div>
       )}
     </AppShell>
+  );
+}
+
+function TotalBalanceCard({
+  rows,
+  generalExpensesCents,
+}: {
+  rows: PaybackRow[];
+  generalExpensesCents: number;
+}) {
+  const totalBalanceCents =
+    rows.reduce((sum, r) => sum + r.balanceCents, 0) - generalExpensesCents;
+  const paid = totalBalanceCents >= 0;
+
+  return (
+    <section className="rounded-md border border-linha bg-white p-5">
+      <h2 className="text-lg font-bold">Balanço total</h2>
+      <p className={`num mt-1 text-4xl font-bold ${paid ? "text-ganho" : "text-perda"}`}>
+        {formatCents(totalBalanceCents)}
+      </p>
+      {generalExpensesCents > 0 && (
+        <p className="mt-2 text-sm text-rocha">
+          Inclui {formatCents(generalExpensesCents)} de despesas gerais da empresa, não ligadas a
+          nenhuma máquina.
+        </p>
+      )}
+    </section>
   );
 }
 

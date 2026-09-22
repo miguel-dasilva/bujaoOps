@@ -72,3 +72,15 @@ export async function getPayback(orgId: string): Promise<PaybackRow[]> {
     };
   });
 }
+
+// Despesas sem máquina nem festa: custos da empresa como um todo (ex.: Bioma).
+// Não entram no payback de nenhuma máquina, mas têm de sair do balanço total.
+export async function getGeneralExpensesCents(orgId: string): Promise<number> {
+  const result = await db.execute(sql`
+    select coalesce(sum(amount_cents), 0) as total
+    from expenses
+    where org_id = ${orgId} and archived_at is null
+      and asset_id is null and revenue_event_id is null
+  `);
+  return Number((result.rows[0] as { total: unknown }).total);
+}
