@@ -1,13 +1,16 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { z } from "zod";
 import { AppShell } from "@/components/app-shell";
+import { RevenueEntryForm } from "@/components/revenue-entry-form";
 import { ButtonLink } from "@/components/ui";
 import { db } from "@/db";
-import { assets, revenueEvents } from "@/db/schema";
-import { formatDateRange } from "@/lib/date";
+import { assets, revenueEntries, revenueEvents } from "@/db/schema";
+import { formatDate, formatDateRange } from "@/lib/date";
 import { formatCents } from "@/lib/money";
 import { requireOrg } from "@/lib/tenant";
+import { createRevenueEntry } from "./apuros/actions";
 
 export default async function RevenueEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { orgId } = await requireOrg();
@@ -33,6 +36,14 @@ export default async function RevenueEventPage({ params }: { params: Promise<{ i
     );
   const event = rows[0];
   if (!event) notFound();
+
+  const entries = await db
+    .select()
+    .from(revenueEntries)
+    .where(and(eq(revenueEntries.revenueEventId, event.id), isNull(revenueEntries.archivedAt)))
+    .orderBy(asc(revenueEntries.occurredOn));
+  const totalGrossCents = entries.reduce((sum, entry) => sum + entry.grossCents, 0);
+  const today = new Date().toISOString().slice(0, 10);
 
   return (
     <AppShell>
@@ -61,6 +72,40 @@ export default async function RevenueEventPage({ params }: { params: Promise<{ i
           </div>
         )}
       </dl>
+
+      <div className="mt-8">
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <h2 className="text-xl font-bold">Apuros</h2>
+          <span className="num text-lg font-bold text-ganho">{formatCents(totalGrossCents)}</span>
+        </div>
+
+        {entries.length > 0 && (
+          <ul className="mb-6 divide-y divide-linha overflow-hidden rounded-md border border-linha bg-white">
+            {entries.map((entry) => (
+              <li key={entry.id}>
+                <Link
+                  href={`/festas/${event.id}/apuros/${entry.id}/editar`}
+                  className="flex items-center gap-4 px-4 py-4 hover:bg-nevoa"
+                >
+                  <span className="num min-w-20 text-rocha">{formatDate(entry.occurredOn)}</span>
+                  <span className="flex-1">{entry.label || "—"}</span>
+                  <span className="num font-bold">{formatCents(entry.grossCents)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="rounded-md border border-linha bg-white p-4">
+          <h3 className="mb-4 font-bold">Registar apuro</h3>
+          <RevenueEntryForm
+            action={createRevenueEntry.bind(null, event.id)}
+            defaults={{ occurredOn: today }}
+            submitLabel="Registar apuro"
+            resetOnSuccess
+          />
+        </div>
+      </div>
     </AppShell>
   );
 }

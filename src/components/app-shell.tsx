@@ -16,6 +16,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Link href="/maquinas" className="rounded px-3 py-2 hover:bg-white/10">
               Máquinas
             </Link>
+            <Link href="/despesas" className="rounded px-3 py-2 hover:bg-white/10">
+              Despesas
+            </Link>
           </nav>
           <div className="ml-auto flex items-center gap-3">
             <OrganizationSwitcher
