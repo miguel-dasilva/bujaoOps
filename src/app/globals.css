@@ -1,9 +1,13 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* Pensado para usar ao sol, numa festa, com uma mão: contraste alto,
    alvos de toque grandes, números tabulares. Cores do Pico: basalto,
    nevoeiro, Atlântico. Verde e vermelho só para ganho e perda. */
-@theme {
+@theme static {
   --color-basalto: #23282b;
   --color-rocha: #5b6368;
   --color-linha: #d6dcda;
@@ -14,9 +18,78 @@
   --font-sans: var(--font-atkinson), system-ui, sans-serif;
 }
 
-body {
-  background: var(--color-nevoa);
-  color: var(--color-basalto);
+/* Tokens semânticos do shadcn/ui apontam para a paleta acima. */
+@theme inline {
+  --font-heading: var(--font-sans);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: var(--color-nevoa);
+  --foreground: var(--color-basalto);
+  --card: #fff;
+  --card-foreground: var(--color-basalto);
+  --popover: #fff;
+  --popover-foreground: var(--color-basalto);
+  --primary: var(--color-atlantico);
+  --primary-foreground: #fff;
+  --secondary: #fff;
+  --secondary-foreground: var(--color-basalto);
+  --muted: var(--color-nevoa);
+  --muted-foreground: var(--color-rocha);
+  --accent: var(--color-nevoa);
+  --accent-foreground: var(--color-basalto);
+  --destructive: var(--color-perda);
+  --border: var(--color-linha);
+  --input: var(--color-linha);
+  --ring: var(--color-atlantico);
+  --chart-1: var(--color-atlantico);
+  --chart-2: var(--color-ganho);
+  --chart-3: var(--color-perda);
+  --chart-4: var(--color-rocha);
+  --chart-5: var(--color-linha);
+  --radius: 0.375rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }
 
 .num {

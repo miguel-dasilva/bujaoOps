@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { and, asc, eq, isNull } from "drizzle-orm";
 import { AppShell } from "@/components/app-shell";
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink } from "@/components/button-link";
 import { db } from "@/db";
 import { assets } from "@/db/schema";
 import { formatCents } from "@/lib/money";
@@ -39,6 +39,9 @@ export default async function MachinesPage() {
                 <span className="flex-1">{a.name}</span>
                 <span className="num text-rocha">
                   {a.acquisitionCostCents != null ? formatCents(a.acquisitionCostCents) : "sem custo"}
+                </span>
+                <span className="flex-1">
+                  {a.description || "sem descrição"}
                 </span>
               </Link>
             </li>

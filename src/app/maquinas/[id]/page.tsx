@@ -30,6 +30,7 @@ export default async function EditMachinePage({ params }: { params: Promise<{ id
         defaults={{
           code: asset.code,
           name: asset.name,
+          description: asset.description ?? "",
           acquiredOn: asset.acquiredOn ?? "",
           acquisitionCost: centsToInput(asset.acquisitionCostCents),
           pricePerGame: centsToInput(asset.attributes.pricePerGameCents),

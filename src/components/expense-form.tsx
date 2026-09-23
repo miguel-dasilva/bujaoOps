@@ -2,7 +2,9 @@
 
 import { useActionState } from "react";
 import type { FormState } from "@/app/despesas/actions";
-import { Button, ButtonLink, Field, Select } from "./ui";
+import { ButtonLink } from "./button-link";
+import { TextField, SelectField } from "./form-fields";
+import { Button } from "./ui/button";
 
 const CATEGORY_SUGGESTIONS = [
   "Combustível",
@@ -47,7 +49,7 @@ export function ExpenseForm({
           {state.message}
         </p>
       )}
-      <Field
+      <TextField
         label="Descrição"
         name="description"
         defaultValue={defaults.description}
@@ -55,7 +57,7 @@ export function ExpenseForm({
         required
         errors={e.description}
       />
-      <Field
+      <TextField
         label="Categoria"
         name="category"
         defaultValue={defaults.category}
@@ -68,7 +70,7 @@ export function ExpenseForm({
           <option key={c} value={c} />
         ))}
       </datalist>
-      <Field
+      <TextField
         label="Valor (€)"
         name="amountCents"
         defaultValue={defaults.amountCents}
@@ -77,7 +79,7 @@ export function ExpenseForm({
         required
         errors={e.amountCents}
       />
-      <Field
+      <TextField
         label="Data"
         name="incurredOn"
         type="date"
@@ -85,7 +87,7 @@ export function ExpenseForm({
         required
         errors={e.incurredOn}
       />
-      <Select
+      <SelectField
         label="Máquina"
         name="assetId"
         defaultValue={defaults.assetId ?? ""}
@@ -96,7 +98,7 @@ export function ExpenseForm({
           ...assets.map((a) => ({ value: a.id, label: `${a.code} — ${a.name}` })),
         ]}
       />
-      <Select
+      <SelectField
         label="Festa"
         name="revenueEventId"
         defaultValue={defaults.revenueEventId ?? ""}
@@ -111,7 +113,7 @@ export function ExpenseForm({
         <Button type="submit" disabled={pending}>
           {pending ? "A guardar…" : submitLabel}
         </Button>
-        <ButtonLink href={cancelHref} variant="quiet">
+        <ButtonLink href={cancelHref} variant="outline">
           Cancelar
         </ButtonLink>
       </div>

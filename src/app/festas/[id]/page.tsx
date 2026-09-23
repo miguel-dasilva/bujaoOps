@@ -4,7 +4,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { AppShell } from "@/components/app-shell";
 import { RevenueEntryForm } from "@/components/revenue-entry-form";
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink } from "@/components/button-link";
 import { db } from "@/db";
 import { assets, revenueEntries, revenueEvents } from "@/db/schema";
 import { formatDate, formatDateRange } from "@/lib/date";
@@ -55,7 +55,7 @@ export default async function RevenueEventPage({ params }: { params: Promise<{ i
             {event.venueName ? ` · ${event.venueName}` : ""}
           </p>
         </div>
-        <ButtonLink href={`/festas/${event.id}/editar`} variant="quiet">
+        <ButtonLink href={`/festas/${event.id}/editar`} variant="outline">
           Editar
         </ButtonLink>
       </div>

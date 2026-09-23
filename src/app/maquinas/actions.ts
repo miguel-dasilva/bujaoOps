@@ -18,6 +18,7 @@ function toRow(input: AssetInput) {
   return {
     code: input.code,
     name: input.name,
+    description: input.description,
     acquiredOn: input.acquiredOn,
     acquisitionCostCents: input.acquisitionCost,
     attributes: {

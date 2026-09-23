@@ -52,6 +52,7 @@ export const assetSchema = z.object({
     .max(20, "Máximo de 20 caracteres")
     .transform((v) => v.toUpperCase()),
   name: z.string().trim().min(1, "Indica um nome").max(80, "Máximo de 80 caracteres"),
+  description: optionalText,
   acquiredOn: optionalDate,
   acquisitionCost: optionalEuros,
   pricePerGame: optionalEuros,

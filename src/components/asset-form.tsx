@@ -2,7 +2,9 @@
 
 import { useActionState } from "react";
 import type { FormState } from "@/app/maquinas/actions";
-import { Button, ButtonLink, Field } from "./ui";
+import { ButtonLink } from "./button-link";
+import { TextField } from "./form-fields";
+import { Button } from "./ui/button";
 
 export type AssetFormDefaults = {
   code?: string;
@@ -11,6 +13,7 @@ export type AssetFormDefaults = {
   acquisitionCost?: string;
   pricePerGame?: string;
   serialNumber?: string;
+  description?: string;
 };
 
 export function AssetForm({
@@ -32,7 +35,7 @@ export function AssetForm({
           {state.message}
         </p>
       )}
-      <Field
+      <TextField
         label="Código"
         name="code"
         defaultValue={defaults.code}
@@ -41,8 +44,8 @@ export function AssetForm({
         required
         errors={e.code}
       />
-      <Field label="Nome" name="name" defaultValue={defaults.name} required errors={e.name} />
-      <Field
+      <TextField label="Nome" name="name" defaultValue={defaults.name} required errors={e.name} />
+      <TextField
         label="Custo de compra (€)"
         name="acquisitionCost"
         defaultValue={defaults.acquisitionCost}
@@ -51,14 +54,14 @@ export function AssetForm({
         hint="É o valor que o payback tem de recuperar."
         errors={e.acquisitionCost}
       />
-      <Field
+      <TextField
         label="Data de compra"
         name="acquiredOn"
         type="date"
         defaultValue={defaults.acquiredOn}
         errors={e.acquiredOn}
       />
-      <Field
+      <TextField
         label="Preço por jogo (€)"
         name="pricePerGame"
         defaultValue={defaults.pricePerGame}
@@ -66,17 +69,23 @@ export function AssetForm({
         placeholder="1,00"
         errors={e.pricePerGame}
       />
-      <Field
+      <TextField
         label="Número de série"
         name="serialNumber"
         defaultValue={defaults.serialNumber}
         errors={e.serialNumber}
       />
+      <TextField
+        label="Descrição"
+        name="description"
+        defaultValue={defaults.description}
+        errors={e.description}
+      />
       <div className="flex flex-wrap gap-3 pt-2">
         <Button type="submit" disabled={pending}>
           {pending ? "A guardar…" : submitLabel}
         </Button>
-        <ButtonLink href="/maquinas" variant="quiet">
+        <ButtonLink href="/maquinas" variant="outline">
           Cancelar
         </ButtonLink>
       </div>

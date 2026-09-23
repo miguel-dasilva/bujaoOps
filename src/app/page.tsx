@@ -1,5 +1,5 @@
 import { AppShell } from "@/components/app-shell";
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink } from "@/components/button-link";
 import { getGeneralExpensesCents, getPayback, type PaybackRow } from "@/db/payback";
 import { formatCents } from "@/lib/money";
 import { requireOrg } from "@/lib/tenant";

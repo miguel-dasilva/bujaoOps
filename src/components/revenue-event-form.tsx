@@ -2,7 +2,9 @@
 
 import { useActionState } from "react";
 import type { FormState } from "@/app/festas/actions";
-import { Button, ButtonLink, Field, Select } from "./ui";
+import { ButtonLink } from "./button-link";
+import { TextField, SelectField } from "./form-fields";
+import { Button } from "./ui/button";
 
 export type RevenueEventFormDefaults = {
   assetId?: string;
@@ -37,7 +39,7 @@ export function RevenueEventForm({
           {state.message}
         </p>
       )}
-      <Select
+      <SelectField
         label="Máquina"
         name="assetId"
         defaultValue={defaults.assetId}
@@ -45,7 +47,7 @@ export function RevenueEventForm({
         errors={e.assetId}
         options={assets.map((a) => ({ value: a.id, label: `${a.code} — ${a.name}` }))}
       />
-      <Field
+      <TextField
         label="Nome da festa"
         name="title"
         defaultValue={defaults.title}
@@ -53,13 +55,13 @@ export function RevenueEventForm({
         required
         errors={e.title}
       />
-      <Field
+      <TextField
         label="Local"
         name="venueName"
         defaultValue={defaults.venueName}
         errors={e.venueName}
       />
-      <Field
+      <TextField
         label="Data de início"
         name="startsOn"
         type="date"
@@ -67,14 +69,14 @@ export function RevenueEventForm({
         required
         errors={e.startsOn}
       />
-      <Field
+      <TextField
         label="Data de fim"
         name="endsOn"
         type="date"
         defaultValue={defaults.endsOn}
         errors={e.endsOn}
       />
-      <Field
+      <TextField
         label="Comissão do recinto (€)"
         name="platformFee"
         defaultValue={defaults.platformFee}
@@ -83,12 +85,12 @@ export function RevenueEventForm({
         hint="O que fica com o dono do recinto, se houver. Deixa em branco se não houver comissão."
         errors={e.platformFee}
       />
-      <Field label="Notas" name="notes" defaultValue={defaults.notes} errors={e.notes} />
+      <TextField label="Notas" name="notes" defaultValue={defaults.notes} errors={e.notes} />
       <div className="flex flex-wrap gap-3 pt-2">
         <Button type="submit" disabled={pending}>
           {pending ? "A guardar…" : submitLabel}
         </Button>
-        <ButtonLink href={cancelHref} variant="quiet">
+        <ButtonLink href={cancelHref} variant="outline">
           Cancelar
         </ButtonLink>
       </div>

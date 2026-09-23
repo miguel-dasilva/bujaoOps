@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { AppShell } from "@/components/app-shell";
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink } from "@/components/button-link";
 import { db } from "@/db";
 import { expenses } from "@/db/schema";
 import { formatDate } from "@/lib/date";

@@ -2,7 +2,9 @@
 
 import { useActionState, useEffect, useRef } from "react";
 import type { FormState } from "@/app/festas/[id]/apuros/actions";
-import { Button, ButtonLink, Field } from "./ui";
+import { ButtonLink } from "./button-link";
+import { TextField } from "./form-fields";
+import { Button } from "./ui/button";
 
 export type RevenueEntryFormDefaults = {
   occurredOn?: string;
@@ -39,7 +41,7 @@ export function RevenueEntryForm({
           {state.message}
         </p>
       )}
-      <Field
+      <TextField
         label="Data"
         name="occurredOn"
         type="date"
@@ -47,7 +49,7 @@ export function RevenueEntryForm({
         required
         errors={e.occurredOn}
       />
-      <Field
+      <TextField
         label="Apuro bruto (€)"
         name="grossCents"
         defaultValue={defaults.grossCents}
@@ -56,20 +58,20 @@ export function RevenueEntryForm({
         required
         errors={e.grossCents}
       />
-      <Field
+      <TextField
         label="Nome do dia"
         name="label"
         defaultValue={defaults.label}
         placeholder="dia 1"
         errors={e.label}
       />
-      <Field label="Notas" name="note" defaultValue={defaults.note} errors={e.note} />
+      <TextField label="Notas" name="note" defaultValue={defaults.note} errors={e.note} />
       <div className="flex flex-wrap gap-3 pt-2">
         <Button type="submit" disabled={pending}>
           {pending ? "A guardar…" : submitLabel}
         </Button>
         {cancelHref && (
-          <ButtonLink href={cancelHref} variant="quiet">
+          <ButtonLink href={cancelHref} variant="outline">
             Cancelar
           </ButtonLink>
         )}

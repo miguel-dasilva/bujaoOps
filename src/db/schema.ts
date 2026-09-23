@@ -54,6 +54,7 @@ export const assets = pgTable(
     code: text("code").notNull(), // 'BJ-01'
     name: text("name").notNull(),
     status: text("status").notNull().default("active"),
+    description: text("description"),
     acquiredOn: date("acquired_on", { mode: "string" }),
     acquisitionCostCents: cents("acquisition_cost_cents"),
     attributes: jsonb("attributes")
