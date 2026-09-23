@@ -31,7 +31,7 @@ export function AssetForm({
   return (
     <form action={formAction} className="grid gap-5">
       {state.message && (
-        <p role="alert" className="rounded-md border border-perda bg-white p-3 text-perda">
+        <p role="alert" className="rounded-md border border-perda bg-card p-3 text-perda">
           {state.message}
         </p>
       )}

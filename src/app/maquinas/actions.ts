@@ -14,6 +14,30 @@ export type FormState = {
   message?: string;
 };
 
+export type NoteState = { message?: string; ok?: boolean };
+
+// Só a nota. O updateAsset não serve aqui: valida o assetSchema inteiro e
+// rejeitaria um envio que traz apenas este campo.
+export async function updateAssetNote(
+  id: string,
+  _prev: NoteState,
+  formData: FormData,
+): Promise<NoteState> {
+  const { orgId } = await requireOrg();
+  const note = String(formData.get("note") ?? "").trim();
+
+  const updated = await db
+    .update(assets)
+    .set({ description: note || null })
+    .where(and(eq(assets.id, id), eq(assets.orgId, orgId), isNull(assets.archivedAt)))
+    .returning({ id: assets.id });
+  if (updated.length === 0) return { message: "Esta máquina já não existe." };
+
+  revalidatePath("/");
+  revalidatePath("/maquinas");
+  return { ok: true };
+}
+
 function toRow(input: AssetInput) {
   return {
     code: input.code,

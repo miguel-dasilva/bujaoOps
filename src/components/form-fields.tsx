@@ -1,6 +1,7 @@
 import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 
 type FieldMeta = {
   label: string;
@@ -49,6 +50,21 @@ export function TextField({
   return (
     <FieldFrame {...meta}>
       <Input {...controlProps(meta)} {...input} />
+    </FieldFrame>
+  );
+}
+
+export function TextareaField({
+  label,
+  name,
+  hint,
+  errors,
+  ...textarea
+}: React.ComponentProps<"textarea"> & FieldMeta) {
+  const meta = { label, name, hint, errors };
+  return (
+    <FieldFrame {...meta}>
+      <Textarea {...controlProps(meta)} {...textarea} />
     </FieldFrame>
   );
 }

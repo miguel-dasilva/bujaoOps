@@ -18,7 +18,7 @@ export default async function NewRevenueEventPage() {
     <AppShell>
       <h1 className="mb-6 text-3xl font-bold">Registar festa</h1>
       {machines.length === 0 ? (
-        <p className="rounded-md border border-dashed border-linha bg-white p-6 text-rocha">
+        <p className="rounded-md border border-dashed border-linha bg-card p-6 text-rocha">
           Regista primeiro uma máquina para poderes associar uma festa.
         </p>
       ) : (

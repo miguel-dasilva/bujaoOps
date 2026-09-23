@@ -25,7 +25,7 @@ export default async function ExpensesPage() {
       </div>
 
       {rows.length === 0 ? (
-        <p className="rounded-md border border-dashed border-linha bg-white p-6 text-rocha">
+        <p className="rounded-md border border-dashed border-linha bg-card p-6 text-rocha">
           Ainda não tens despesas registadas.
         </p>
       ) : (
@@ -34,7 +34,7 @@ export default async function ExpensesPage() {
             <span className="font-bold">Total</span>
             <span className="num text-lg font-bold text-perda">{formatCents(totalCents)}</span>
           </div>
-          <ul className="divide-y divide-linha overflow-hidden rounded-md border border-linha bg-white">
+          <ul className="divide-y divide-linha overflow-hidden rounded-md border border-linha bg-card">
             {rows.map((r) => (
               <li key={r.id}>
                 <Link

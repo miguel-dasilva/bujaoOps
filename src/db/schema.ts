@@ -137,4 +137,26 @@ export const expenses = pgTable(
   (t) => [index("expenses_org_asset_incurred").on(t.orgId, t.assetId, t.incurredOn)],
 );
 
+// Ficheiros agarrados a uma máquina: manual, garantia, foto de uma avaria.
+// asset_id é obrigatório de propósito — nada de entity_type/entity_id genéricos.
+// Os recibos de despesa têm a coluna própria expenses.receipt_url.
+export const assetAttachments = pgTable(
+  "asset_attachments",
+  {
+    id: id(),
+    orgId: orgId(),
+    assetId: uuid("asset_id")
+      .notNull()
+      .references(() => assets.id),
+    fileName: text("file_name").notNull(),
+    fileUrl: text("file_url").notNull(),
+    contentType: text("content_type"),
+    sizeBytes: integer("size_bytes"),
+    archivedAt: archivedAt(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("asset_attachments_org_asset").on(t.orgId, t.assetId)],
+);
+
 export type Asset = typeof assets.$inferSelect;
+export type AssetAttachment = typeof assetAttachments.$inferSelect;

@@ -12,6 +12,9 @@ import { revenueEntrySchema, type RevenueEntryInput } from "@/lib/validation";
 export type FormState = {
   errors?: Partial<Record<keyof RevenueEntryInput, string[]>>;
   message?: string;
+  // Distingue "gravou agora" do estado inicial do formulário, que também não
+  // tem erros. Sem isto, o formulário festejava sozinho ao abrir a página.
+  ok?: boolean;
 };
 
 function toRow(input: RevenueEntryInput) {
@@ -45,7 +48,8 @@ export async function createRevenueEntry(
   await db.insert(revenueEntries).values({ orgId, revenueEventId, ...toRow(parsed.data) });
 
   revalidatePath(`/festas/${revenueEventId}`);
-  return {};
+  revalidatePath("/");
+  return { ok: true };
 }
 
 export async function updateRevenueEntry(
@@ -73,5 +77,6 @@ export async function updateRevenueEntry(
   if (updated.length === 0) return { message: "Este apuro já não existe." };
 
   revalidatePath(`/festas/${revenueEventId}`);
+  revalidatePath("/");
   redirect(`/festas/${revenueEventId}`);
 }

@@ -7,7 +7,7 @@ import { RevenueEntryForm } from "@/components/revenue-entry-form";
 import { ButtonLink } from "@/components/button-link";
 import { db } from "@/db";
 import { assets, revenueEntries, revenueEvents } from "@/db/schema";
-import { formatDate, formatDateRange } from "@/lib/date";
+import { formatDate, formatDateRange, todayInAzores } from "@/lib/date";
 import { formatCents } from "@/lib/money";
 import { requireOrg } from "@/lib/tenant";
 import { createRevenueEntry } from "./apuros/actions";
@@ -43,7 +43,7 @@ export default async function RevenueEventPage({ params }: { params: Promise<{ i
     .where(and(eq(revenueEntries.revenueEventId, event.id), isNull(revenueEntries.archivedAt)))
     .orderBy(asc(revenueEntries.occurredOn));
   const totalGrossCents = entries.reduce((sum, entry) => sum + entry.grossCents, 0);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayInAzores();
 
   return (
     <AppShell>
@@ -60,7 +60,7 @@ export default async function RevenueEventPage({ params }: { params: Promise<{ i
         </ButtonLink>
       </div>
 
-      <dl className="grid gap-4 rounded-md border border-linha bg-white p-4">
+      <dl className="grid gap-4 rounded-md border border-linha bg-card p-4">
         <div className="flex items-center justify-between">
           <dt className="font-bold">Comissão do recinto</dt>
           <dd className="num">{formatCents(event.platformFeeCents)}</dd>
@@ -80,7 +80,7 @@ export default async function RevenueEventPage({ params }: { params: Promise<{ i
         </div>
 
         {entries.length > 0 && (
-          <ul className="mb-6 divide-y divide-linha overflow-hidden rounded-md border border-linha bg-white">
+          <ul className="mb-6 divide-y divide-linha overflow-hidden rounded-md border border-linha bg-card">
             {entries.map((entry) => (
               <li key={entry.id}>
                 <Link
@@ -96,7 +96,7 @@ export default async function RevenueEventPage({ params }: { params: Promise<{ i
           </ul>
         )}
 
-        <div className="rounded-md border border-linha bg-white p-4">
+        <div className="rounded-md border border-linha bg-card p-4">
           <h3 className="mb-4 font-bold">Registar apuro</h3>
           <RevenueEntryForm
             action={createRevenueEntry.bind(null, event.id)}

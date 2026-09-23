@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ptPT } from "@clerk/localizations";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 // Atkinson Hyperlegible: desenhada para leitura difícil. Ecrã ao sol conta.
@@ -17,14 +18,17 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#23282b",
+  themeColor: "#1e293b",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider localization={ptPT}>
       <html lang="pt-PT" className={atkinson.variable}>
-        <body className="min-h-dvh font-sans antialiased">{children}</body>
+        <body className="min-h-dvh font-sans antialiased">
+          {children}
+          <Toaster position="top-center" richColors />
+        </body>
       </html>
     </ClerkProvider>
   );

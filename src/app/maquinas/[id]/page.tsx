@@ -22,7 +22,7 @@ export default async function EditMachinePage({ params }: { params: Promise<{ id
   return (
     <AppShell>
       <h1 className="mb-6 text-3xl font-bold">
-        Editar <span className="text-atlantico">{asset.code}</span>
+        Editar {asset.code}
       </h1>
       <AssetForm
         action={updateAsset.bind(null, asset.id)}

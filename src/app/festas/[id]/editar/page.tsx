@@ -36,7 +36,7 @@ export default async function EditRevenueEventPage({
   return (
     <AppShell>
       <h1 className="mb-6 text-3xl font-bold">
-        Editar <span className="text-atlantico">{event.title}</span>
+        Editar {event.title}
       </h1>
       <RevenueEventForm
         action={updateRevenueEvent.bind(null, event.id)}

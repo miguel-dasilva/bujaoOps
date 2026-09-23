@@ -23,19 +23,19 @@ export default async function MachinesPage() {
       </div>
 
       {rows.length === 0 ? (
-        <p className="rounded-md border border-dashed border-linha bg-white p-6 text-rocha">
+        <p className="rounded-md border border-dashed border-linha bg-card p-6 text-rocha">
           Ainda não tens máquinas. Regista a primeira com o custo de compra para o resumo começar a
           contar o payback.
         </p>
       ) : (
-        <ul className="divide-y divide-linha overflow-hidden rounded-md border border-linha bg-white">
+        <ul className="divide-y divide-linha overflow-hidden rounded-md border border-linha bg-card">
           {rows.map((a) => (
             <li key={a.id}>
               <Link
                 href={`/maquinas/${a.id}`}
                 className="flex items-center gap-4 px-4 py-4 hover:bg-nevoa"
               >
-                <span className="num min-w-16 font-bold text-atlantico">{a.code}</span>
+                <span className="num min-w-16 font-bold text-basalto">{a.code}</span>
                 <span className="flex-1">{a.name}</span>
                 <span className="num text-rocha">
                   {a.acquisitionCostCents != null ? formatCents(a.acquisitionCostCents) : "sem custo"}
