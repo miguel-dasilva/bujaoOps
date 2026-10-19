@@ -6,13 +6,24 @@ import { assets } from "@/db/schema";
 import { requireOrg } from "@/lib/tenant";
 import { createRevenueEvent } from "../actions";
 
-export default async function NewRevenueEventPage() {
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+export default async function NewRevenueEventPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ de?: string; ate?: string }>;
+}) {
   const { orgId } = await requireOrg();
+  const { de, ate } = await searchParams;
   const machines = await db
     .select({ id: assets.id, code: assets.code, name: assets.name })
     .from(assets)
     .where(and(eq(assets.orgId, orgId), isNull(assets.archivedAt)))
     .orderBy(asc(assets.code));
+
+  // Datas vindas do arrasto no calendário.
+  const startsOn = de && DATE.test(de) ? de : "";
+  const endsOn = ate && DATE.test(ate) && ate !== startsOn ? ate : "";
 
   return (
     <AppShell>
@@ -22,6 +33,7 @@ export default async function NewRevenueEventPage() {
         assets={machines}
         submitLabel="Registar festa"
         cancelHref="/festas"
+        defaults={{ startsOn, endsOn }}
       />
     </AppShell>
   );

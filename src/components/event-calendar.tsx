@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon, TriangleAlertIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, TriangleAlertIcon, XIcon } from "lucide-react";
 import type { CalendarEvent } from "@/db/calendar";
 import { assignLanes, monthGrid, monthLabel, addMonths } from "@/lib/calendar-grid";
 import { formatDateRange } from "@/lib/date";
@@ -14,6 +14,7 @@ import {
 } from "@/lib/event-status";
 import { formatCents } from "@/lib/money";
 import { ButtonLink } from "./button-link";
+import { useDayRangeSelection } from "./use-day-range-selection";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import {
@@ -36,6 +37,7 @@ export function EventCalendar({
   today: string;
 }) {
   const [selected, setSelected] = useState<CalendarEvent | null>(null);
+  const pick = useDayRangeSelection();
   const weeks = monthGrid(month);
   const year = month.slice(0, 4);
 
@@ -79,7 +81,13 @@ export function EventCalendar({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-linha bg-card">
+      <div
+        ref={pick.gridRef}
+        {...pick.handlers}
+        className={`overflow-hidden rounded-xl border border-linha bg-card select-none ${
+          pick.dragging ? "touch-none" : ""
+        }`}
+      >
         <div className="grid grid-cols-7 border-b border-linha bg-nevoa">
           {WEEKDAYS.map((d) => (
             <div key={d} className="px-1 py-2 text-center text-sm font-bold text-rocha">
@@ -97,18 +105,29 @@ export function EventCalendar({
           const lanes = spans.length === 0 ? 0 : Math.max(...spans.map((s) => s.lane)) + 1;
           return (
             <div key={week[0].iso} className="relative border-b border-linha last:border-b-0">
-              <div className="pointer-events-none absolute inset-0 grid grid-cols-7">
+              <div className="absolute inset-0 grid grid-cols-7">
                 {week.map((d) => (
-                  <div
+                  <button
                     key={d.iso}
+                    type="button"
+                    data-day={d.iso}
+                    // detail === 0 distingue o Enter do teclado de um clique
+                    // de rato. O clique já foi tratado no pointerup, e deixá-lo
+                    // passar aqui apagava a seleção feita a arrastar.
+                    onClick={(e) => e.detail === 0 && pick.selectDay(d.iso)}
+                    aria-label={`${d.day} — escolher dia para uma festa nova`}
                     className={`border-r border-linha last:border-r-0 ${
-                      d.inMonth ? "" : "bg-nevoa/60"
+                      pick.isSelected(d.iso)
+                        ? "bg-lava/15 inset-ring-2 inset-ring-lava"
+                        : d.inMonth
+                          ? "hover:bg-nevoa"
+                          : "bg-nevoa/60"
                     }`}
                   />
                 ))}
               </div>
 
-              <div className="relative grid grid-cols-7">
+              <div className="pointer-events-none relative grid grid-cols-7">
                 {week.map((d) => (
                   <div key={d.iso} className="px-1.5 pt-1.5">
                     <span
@@ -127,7 +146,7 @@ export function EventCalendar({
               </div>
 
               <div
-                className="relative grid grid-cols-7 gap-y-0.5 px-0.5 pt-1 pb-1.5"
+                className="pointer-events-none relative grid grid-cols-7 gap-y-0.5 px-0.5 pt-1 pb-1.5"
                 style={{ minHeight: `${Math.max(lanes, 1) * 1.75 + 0.5}rem` }}
               >
                 {spans.map((s) => (
@@ -139,7 +158,7 @@ export function EventCalendar({
                       gridColumn: `${s.startCol + 1} / ${s.endCol + 2}`,
                       gridRow: s.lane + 1,
                     }}
-                    className={`flex min-w-0 items-center gap-1 overflow-hidden px-1.5 py-0.5 text-left text-xs font-bold ${
+                    className={`pointer-events-auto flex min-w-0 items-center gap-1 overflow-hidden px-1.5 py-0.5 text-left text-xs font-bold ${
                       EVENT_STATUS_BAR[s.event.status]
                     } ${s.continuesBefore ? "rounded-l-none" : "rounded-l-md"} ${
                       s.continuesAfter ? "rounded-r-none" : "rounded-r-md"
@@ -160,6 +179,29 @@ export function EventCalendar({
           );
         })}
       </div>
+
+      {pick.range ? (
+        <div className="sticky bottom-3 z-10 flex flex-wrap items-center gap-3 rounded-xl border border-lava bg-card p-3 shadow-lg">
+          <span className="flex-1 font-bold">
+            {formatDateRange(pick.range.from, pick.range.to === pick.range.from ? null : pick.range.to)}
+          </span>
+          <ButtonLink
+            href={`/festas/nova?de=${pick.range.from}&ate=${pick.range.to}`}
+            size="sm"
+          >
+            <PlusIcon />
+            Registar festa
+          </ButtonLink>
+          <Button variant="ghost" size="icon-sm" onClick={pick.clear} aria-label="Limpar seleção">
+            <XIcon />
+          </Button>
+        </div>
+      ) : (
+        <p className="text-sm text-rocha">
+          Arrasta por cima dos dias para marcar uma festa nova. No telemóvel,
+          carrega e aguenta antes de arrastar.
+        </p>
+      )}
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-rocha">
         {EVENT_STATUSES.map((s) => (
