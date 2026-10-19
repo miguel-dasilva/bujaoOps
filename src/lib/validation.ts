@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { EVENT_STATUSES } from "./event-status";
 import { parseEurosToCents } from "./money";
 
 function parseEurosField(v: string, ctx: z.RefinementCtx) {
@@ -61,19 +62,34 @@ export const assetSchema = z.object({
 
 export type AssetInput = z.output<typeof assetSchema>;
 
-export const revenueEventSchema = z.object({
-  assetId: z.uuid("Escolhe uma máquina"),
-  title: z
-    .string()
-    .trim()
-    .min(1, "Indica um nome para a festa")
-    .max(120, "Máximo de 120 caracteres"),
-  venueName: optionalText,
-  startsOn: requiredDate,
-  endsOn: optionalDate,
-  platformFee: optionalEuros,
-  notes: optionalText,
-});
+export const revenueEventSchema = z
+  .object({
+    // Opcional: uma festa em "ideia" ainda não tem máquina nenhuma.
+    assetId: optionalUuid,
+    status: z.enum(EVENT_STATUSES),
+    title: z
+      .string()
+      .trim()
+      .min(1, "Indica um nome para a festa")
+      .max(120, "Máximo de 120 caracteres"),
+    island: optionalText,
+    venueName: optionalText,
+    startsOn: requiredDate,
+    endsOn: optionalDate,
+    platformFee: optionalEuros,
+    contactName: optionalText,
+    contactInfo: optionalText,
+    conditions: optionalText,
+    notes: optionalText,
+  })
+  .refine((v) => !v.endsOn || v.endsOn >= v.startsOn, {
+    path: ["endsOn"],
+    message: "A festa não pode acabar antes de começar.",
+  })
+  .refine((v) => v.status !== "confirmed" || v.assetId, {
+    path: ["assetId"],
+    message: "Uma festa confirmada precisa de uma máquina alocada.",
+  });
 
 export type RevenueEventInput = z.output<typeof revenueEventSchema>;
 

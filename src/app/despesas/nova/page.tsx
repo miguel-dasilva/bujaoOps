@@ -17,7 +17,7 @@ export default async function NewExpensePage() {
     db
       .select({ id: revenueEvents.id, title: revenueEvents.title, assetCode: assets.code })
       .from(revenueEvents)
-      .innerJoin(assets, eq(revenueEvents.assetId, assets.id))
+      .leftJoin(assets, eq(revenueEvents.assetId, assets.id))
       .where(and(eq(revenueEvents.orgId, orgId), isNull(revenueEvents.archivedAt)))
       .orderBy(asc(revenueEvents.startsOn)),
   ]);

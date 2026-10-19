@@ -17,6 +17,8 @@ export type PaybackRow = {
 // (Somar a comissão num join com as entradas multiplicava-a pelo nº de dias.)
 // Despesas contam se estiverem ligadas à máquina OU a uma festa da máquina.
 // Despesas gerais (sem máquina nem festa) ficam fora do payback por máquina.
+// Só festas confirmadas descontam comissão: uma ideia ou uma festa a que não
+// fomos não cobra nada, mesmo que a comissão esteja anotada.
 export async function getPayback(orgId: string): Promise<PaybackRow[]> {
   const result = await db.execute(sql`
     select
@@ -36,6 +38,7 @@ export async function getPayback(orgId: string): Promise<PaybackRow[]> {
         from revenue_events ev
         where ev.asset_id = a.id and ev.org_id = a.org_id
           and ev.archived_at is null
+          and ev.status = 'confirmed'
       ), 0) as fees,
       coalesce((
         select sum(x.amount_cents)

@@ -44,12 +44,17 @@ export default async function EditRevenueEventPage({
         submitLabel="Guardar alterações"
         cancelHref={`/festas/${event.id}`}
         defaults={{
-          assetId: event.assetId,
+          assetId: event.assetId ?? "",
+          status: event.status,
           title: event.title,
+          island: event.island ?? "",
           venueName: event.venueName ?? "",
           startsOn: event.startsOn,
           endsOn: event.endsOn ?? "",
           platformFee: centsToInput(event.platformFeeCents),
+          contactName: event.contactName ?? "",
+          contactInfo: event.contactInfo ?? "",
+          conditions: event.conditions ?? "",
           notes: event.notes ?? "",
         }}
       />

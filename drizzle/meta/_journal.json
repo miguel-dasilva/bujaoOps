@@ -22,6 +22,13 @@
       "when": 1790198947785,
       "tag": "0002_grey_blob",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792447868554,
+      "tag": "0003_curious_miek",
+      "breakpoints": true
     }
   ]
 }

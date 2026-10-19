@@ -17,18 +17,12 @@ export default async function NewRevenueEventPage() {
   return (
     <AppShell>
       <h1 className="mb-6 text-3xl font-bold">Registar festa</h1>
-      {machines.length === 0 ? (
-        <p className="rounded-md border border-dashed border-linha bg-card p-6 text-rocha">
-          Regista primeiro uma máquina para poderes associar uma festa.
-        </p>
-      ) : (
-        <RevenueEventForm
-          action={createRevenueEvent}
-          assets={machines}
-          submitLabel="Registar festa"
-          cancelHref="/festas"
-        />
-      )}
+      <RevenueEventForm
+        action={createRevenueEvent}
+        assets={machines}
+        submitLabel="Registar festa"
+        cancelHref="/festas"
+      />
     </AppShell>
   );
 }

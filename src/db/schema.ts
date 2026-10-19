@@ -72,15 +72,20 @@ export const revenueEvents = pgTable(
   {
     id: id(),
     orgId: orgId(),
-    assetId: uuid("asset_id")
-      .notNull()
-      .references(() => assets.id),
+    // Nulo de propósito: uma festa que ainda é só uma ideia não tem máquina.
+    // Alocar a máquina é o que a torna nossa.
+    assetId: uuid("asset_id").references(() => assets.id),
     title: text("title").notNull(), // 'Semana do Mar 2026'
+    island: text("island"), // nos Açores a ilha decide a logística toda
     venueName: text("venue_name"),
     startsOn: date("starts_on", { mode: "string" }).notNull(),
     endsOn: date("ends_on", { mode: "string" }),
     platformFeeCents: cents("platform_fee_cents").notNull().default(0),
+    // idea → contacted → confirmed → out. Ver lib/event-status.ts.
     status: text("status").notNull().default("confirmed"),
+    contactName: text("contact_name"),
+    contactInfo: text("contact_info"), // telefone ou email, campo livre
+    conditions: text("conditions"), // preço do espaço, horários, eletricidade
     notes: text("notes"),
     archivedAt: archivedAt(),
     createdAt: createdAt(),

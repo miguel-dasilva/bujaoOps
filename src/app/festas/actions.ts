@@ -16,12 +16,17 @@ export type FormState = {
 
 function toRow(input: RevenueEventInput) {
   return {
-    assetId: input.assetId,
+    assetId: input.assetId ?? null,
+    status: input.status,
     title: input.title,
+    island: input.island ?? null,
     venueName: input.venueName ?? null,
     startsOn: input.startsOn,
     endsOn: input.endsOn,
     platformFeeCents: input.platformFee ?? 0,
+    contactName: input.contactName ?? null,
+    contactInfo: input.contactInfo ?? null,
+    conditions: input.conditions ?? null,
     notes: input.notes ?? null,
   };
 }

@@ -51,6 +51,7 @@ export async function getMachineCards(orgId: string): Promise<MachineCard[]> {
       select asset_id, id, title, venue_name, starts_on, ends_on
       from revenue_events
       where org_id = ${orgId} and archived_at is null
+        and asset_id is not null
         and starts_on <= ${today}
         and coalesce(ends_on, starts_on) >= ${today}
       order by starts_on desc

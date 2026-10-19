@@ -34,7 +34,7 @@ export function ExpenseForm({
 }: {
   action: (prev: FormState, formData: FormData) => Promise<FormState>;
   assets: { id: string; code: string; name: string }[];
-  revenueEvents: { id: string; title: string; assetCode: string }[];
+  revenueEvents: { id: string; title: string; assetCode: string | null }[];
   defaults?: ExpenseFormDefaults;
   submitLabel: string;
   cancelHref: string;
@@ -106,7 +106,10 @@ export function ExpenseForm({
         errors={e.revenueEventId}
         options={[
           { value: "", label: "— nenhuma —" },
-          ...revenueEvents.map((r) => ({ value: r.id, label: `${r.assetCode} — ${r.title}` })),
+          ...revenueEvents.map((r) => ({
+            value: r.id,
+            label: r.assetCode ? `${r.assetCode} — ${r.title}` : r.title,
+          })),
         ]}
       />
       <div className="flex flex-wrap gap-3 pt-2">
